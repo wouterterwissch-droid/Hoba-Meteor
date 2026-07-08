@@ -1,0 +1,29 @@
+flowchart TD
+    A[New SAP master-data request] --> B[Collect required data: tag, plant, area, manufacturer, model, serial number, criticality, drawings, spare need]
+    B --> C{Duplicate exists?}
+    C -- Yes --> C1[Use or update existing SAP object]
+    C -- No --> D{Is it a physical installed position or location?}
+
+    D -- Yes --> FL[Create or update Functional Location]
+    D -- No --> E{Is it bought, stocked, consumed, repaired, or issued?}
+
+    E -- Yes --> MAT[Create or extend Material Master]
+    E -- No --> REVIEW[Return for engineering/master-data review]
+
+    FL --> F{Is there an installed item needing history, PM, serial tracking, inspection, or cost tracking?}
+    F -- No --> MAT2[Maintain as BOM component/material only]
+    F -- Yes --> G{Does it have a rotating shaft or rotating assembly?}
+
+    G -- Yes --> ROT[Create Equipment: Rotating Asset<br/>Motor, Gearbox, Pump, Fan, Compressor]
+    G -- No --> STATIC[Create Equipment: Non-Rotating/Static Asset<br/>Skid, Tank, Vessel, Casing, Piping, Foundation]
+
+    ROT --> H[Assign to Functional Location]
+    STATIC --> H
+    H --> I[Build equipment hierarchy<br/>Pump Set -> Motor + Gearbox + Pump]
+    I --> J[Create Equipment BOM and/or Functional Location BOM]
+    MAT --> J
+    MAT2 --> J
+    J --> K[Create task list, measuring points, counters, maintenance plan]
+    K --> L[Execute notifications and maintenance orders]
+    L --> M[Close order and update history, BOMs, plans, and reliability data]
+    C1 --> M
