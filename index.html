@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FMECA Tool | Cargill Multiseed Amsterdam</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Data Driven Maintenance</p>
+        <h1>FMECA Tool voor Cargill Multiseed Amsterdam</h1>
+        <p class="lead">Prioriteer faalwijzen, borg beheersmaatregelen en maak onderhoudsbesluiten transparant voor multiseed-processen.</p>
+      </div>
+      <section class="score-card" aria-label="Samenvatting hoogste risico">
+        <span>Hoogste RPN</span>
+        <strong id="highestRpn">0</strong>
+        <small id="highestAsset">Nog geen faalwijzen ingevoerd</small>
+      </section>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <h2>Nieuwe FMECA-regel</h2>
+        <form id="fmecaForm" class="fmeca-form">
+          <label>Installatie / asset
+            <input id="asset" required placeholder="Bijv. Extractor, perslijn, transportband" />
+          </label>
+          <label>Functie
+            <input id="function" required placeholder="Wat moet de asset doen?" />
+          </label>
+          <label>Faalwijze
+            <input id="failureMode" required placeholder="Hoe kan de functie falen?" />
+          </label>
+          <label>Effect
+            <textarea id="effect" required placeholder="Gevolg voor veiligheid, kwaliteit, productie of milieu"></textarea>
+          </label>
+          <div class="grid-3">
+            <label>Ernst (S)
+              <select id="severity" required></select>
+            </label>
+            <label>Voorkomen (O)
+              <select id="occurrence" required></select>
+            </label>
+            <label>Detectie (D)
+              <select id="detection" required></select>
+            </label>
+          </div>
+          <label>Aanbevolen actie
+            <textarea id="action" placeholder="Inspectie, modificatie, spare part, procedure, conditiemeting..."></textarea>
+          </label>
+          <button type="submit">Voeg toe aan analyse</button>
+        </form>
+      </section>
+
+      <section class="panel wide">
+        <div class="toolbar">
+          <div>
+            <h2>FMECA-register</h2>
+            <p>RPN = Ernst × Voorkomen × Detectie. Sorteer op kriticiteit om onderhoudswerk te prioriteren.</p>
+          </div>
+          <div class="actions">
+            <button id="loadExample" type="button">Laad voorbeelden</button>
+            <button id="exportCsv" type="button">Exporteer CSV</button>
+            <button id="clearAll" type="button" class="danger">Wis alles</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Functie</th>
+                <th>Faalwijze</th>
+                <th>Effect</th>
+                <th>S</th>
+                <th>O</th>
+                <th>D</th>
+                <th>RPN</th>
+                <th>Klasse</th>
+                <th>Actie</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="fmecaRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel guidance">
+        <h2>Scoringsrichtlijn</h2>
+        <div class="guidance-grid">
+          <article><h3>Ernst</h3><p>1 = verwaarloosbaar, 10 = ernstige HSE-impact, voedselveiligheidsrisico of langdurige productiestop.</p></article>
+          <article><h3>Voorkomen</h3><p>1 = zeer zeldzaam, 10 = verwacht frequent of bekend repeterend probleem.</p></article>
+          <article><h3>Detectie</h3><p>1 = vrijwel zeker vooraf detecteerbaar, 10 = niet detecteerbaar vóór falen.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <template id="rowTemplate">
+      <tr>
+        <td data-field="asset"></td>
+        <td data-field="function"></td>
+        <td data-field="failureMode"></td>
+        <td data-field="effect"></td>
+        <td data-field="severity"></td>
+        <td data-field="occurrence"></td>
+        <td data-field="detection"></td>
+        <td><strong data-field="rpn"></strong></td>
+        <td><span data-field="criticality" class="badge"></span></td>
+        <td data-field="action"></td>
+        <td><button type="button" class="icon-button" data-action="delete" aria-label="Verwijder regel">×</button></td>
+      </tr>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
